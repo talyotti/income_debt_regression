@@ -1,0 +1,496 @@
+# add necessary libraries
+library(ggplot2)
+library(arm)
+library(car)
+library(gridExtra)
+
+# set directory
+setwd("~/Desktop/ST211/final_group_project")
+
+### --------------------------------------------------------------------------------------------
+# GETTING & PREPARING DATA
+# take a look at the whole data
+gp.data <- read.csv("W8DINCW.csv", header=T)
+summary(gp.data)
+nrow(gp.data)
+
+#replace negative values with NA 
+gp.data[gp.data < 0] <- NA
+missing_percentage <- (colSums(is.na(gp.data)) / nrow(gp.data)) * 100
+missing_percentage
+
+# remove variables missing more than 90% from the data
+gp.data <- gp.data[, !(names(gp.data) %in% c("W4Childck1YP", "W6NEETAct","W6Childliv","W6UnivYP1"))]
+
+
+### --------------------------------------------------------------------------------------------
+# PLOTTING
+# 1. W1GrssyrMP
+p1 <- ggplot(gp.data, aes(x=W1GrssyrMP, y=W8DINCW)) +geom_point() + geom_smooth(method = "lm")
+p1
+# 2. W1GrssyrHH
+p2 <- ggplot(gp.data, aes(x=W1GrssyrHH, y=W8DINCW)) +geom_point() + geom_smooth(method = "lm")
+p2
+
+# 3. W1wrk1aMP
+p3 <-ggplot(gp.data, aes(x=factor(W1wrk1aMP), y=W8DINCW)) + geom_boxplot()
+p3
+
+# 4. W1condur5MP
+summary(gp.data$W1condur5MP)
+p4 <-ggplot(gp.data, aes(x=factor(W1condur5MP), y=W8DINCW)) + geom_boxplot()
+p4
+
+# 5. W1hea2MP
+p5 <-ggplot(gp.data, aes(x=factor(W1hea2MP), y=W8DINCW)) + geom_boxplot()
+p5
+
+# 6. W1InCarHH
+p6 <-ggplot(gp.data, aes(x=factor(W1InCarHH), y=W8DINCW)) + geom_boxplot()
+p6
+
+# 7. W1hous12HH
+p7 <-ggplot(gp.data, aes(x=factor(W1hous12HH), y=W8DINCW)) + geom_boxplot()
+p7
+
+# 8. IndSchool
+p8 <-ggplot(gp.data, aes(x=factor(IndSchool), y=W8DINCW)) + geom_boxplot()
+p8
+
+# 9. W1nssecfam
+p9 <-ggplot(gp.data, aes(x=factor(W1nssecfam), y=W8DINCW)) + geom_boxplot()
+p9
+
+# 10. W1ethgrpYP
+p10 <-ggplot(gp.data, aes(x=factor(W1ethgrpYP), y=W8DINCW)) + geom_boxplot()
+p10
+summary(gp.data$W1ethgrpYP)
+# 11. W1heposs9YP
+p11 <-ggplot(gp.data, aes(x=factor(W1heposs9YP), y=W8DINCW)) + geom_boxplot()
+p11
+
+# 12. W1disabYP
+p12 <-ggplot(gp.data, aes(x=factor(W1disabYP), y=W8DINCW)) + geom_boxplot()
+p12
+
+# 13. W1hiqualdad
+p13 <-ggplot(gp.data, aes(x=factor(W1hiqualdad), y=W8DINCW)) + geom_boxplot()
+p13
+
+# 14. W1hiqualmum
+p14 <-ggplot(gp.data, aes(x=factor(W1hiqualmum), y=W8DINCW)) + geom_boxplot()
+p14
+
+# 15. W1wrkfullmum
+p15 <-ggplot(gp.data, aes(x=factor(W1wrkfullmum), y=W8DINCW)) + geom_boxplot()
+p15
+
+# 16. W1depkids
+p16 <-ggplot(gp.data, aes(x=factor(W1depkids), y=W8DINCW)) + geom_boxplot()
+p16
+
+# W4empsYP 5
+p_W4empsYP <- ggplot(gp.data, aes(x=W4empsYP, y=W8DINCW)) + geom_boxplot()
+p_W4empsYP
+
+# W4schatYP 10
+p_W4schatYP <- ggplot(gp.data, aes(x=W4schatYP, y=W8DINCW)) + geom_boxplot()
+p_W4schatYP
+
+# W5JobYP 1.5
+p_W5JobYP <- ggplot(gp.data, aes(x=W5JobYP, y=W8DINCW)) + geom_boxplot()
+p_W5JobYP
+
+# W6acqno 5
+p_W6acqno <- ggplot(gp.data, aes(x=W6acqno, y=W8DINCW)) + geom_boxplot()
+p_W6acqno
+
+# W6gcse 2.5
+p_W6gcse <- ggplot(gp.data, aes(x=W6gcse, y=W8DINCW)) + geom_boxplot()
+p_W6gcse
+
+# W6als 2.5
+p_W6als <- ggplot(gp.data, aes(x=W6als, y=W8DINCW)) + geom_boxplot()
+p_W6als
+
+# W6OwnchiDV  1.5
+p_W6OwnchiDV <- ggplot(gp.data, aes(x=W6OwnchiDV, y=W8DINCW)) + geom_boxplot()
+p_W6OwnchiDV
+
+# W8DGHQSC 6
+p_W8DGHQSC <- ggplot(gp.data, aes(x=W8DGHQSC, y=W8DINCW)) + geom_boxplot()
+p_W8DGHQSC
+
+# W8DACTIVITY 7.5
+p_W8DACTIVITY <- ggplot(gp.data, aes(x=W8DACTIVITY, y=W8DINCW)) + geom_boxplot()
+p_W8DACTIVITY
+
+# W8QMAFI 3
+p_W8QMAFI <- ggplot(gp.data, aes(x=W8QMAFI, y=W8DINCW)) + geom_boxplot()
+p_W8QMAFI
+
+# W2disc1YP 1.5
+p_W2disc1YP <- ggplot(gp.data, aes(x=W2disc1YP, y=W8DINCW)) + geom_boxplot()
+p_W2disc1YP
+
+# W2depressYP  2.5 
+p_W2depressYP <- ggplot(gp.data, aes(x=W2depressYP, y=W8DINCW)) + geom_boxplot()
+p_W2depressYP
+
+# W4RacismYP  
+p_W4RacismYP <- ggplot(gp.data, aes(x=W4RacismYP, y=W8DINCW)) + geom_boxplot()
+p_W4RacismYP
+
+# W4Childck1YP
+p_W4Childck1YP <- ggplot(gp.data, aes(x=W4Childck1YP, y=W8DINCW)) + geom_boxplot()
+p_W4Childck1YP
+
+# W1NoldBroHS
+p_W1NoldBroHS <- ggplot(gp.data, aes(x=W1NoldBroHS, y=W8DINCW)) + geom_boxplot()
+p_W1NoldBroHS
+
+# W6EducYP and W6Apprent1YP
+p_W6EducYP <- ggplot(gp.data, aes(x=W6EducYP, y=W8DINCW)) + geom_boxplot()
+p_W6EducYP
+p_W6Apprent1YP <- ggplot(gp.data, aes(x=W6Apprent1YP, y=W8DINCW)) + geom_boxplot()
+p_W6Apprent1YP
+
+# W8DMARSTAT
+p_W8DMARSTAT <- ggplot(gp.data, aes(x=factor(W8DMARSTAT), y=W8DINCW)) + geom_boxplot()
+p_W8DMARSTAT
+
+### --------------------------------------------------------------------------------------------
+
+# REMOVE MISSING LESS THAN 10%
+# calculate the percentage of missing values for each variable
+missing_percentage <- (colSums(is.na(gp.data)) / nrow(gp.data)) * 100
+missing_percentage
+
+# check continuous value percentages
+continuous_missing_percentage <- missing_percentage[continuous_vars]
+continuous_missing_percentage
+
+# Identify columns with less than 10% missing data and excluding specific variables
+#cols_less_10 <- names(missing_percentage)[missing_percentage <= 10 & !names(missing_percentage) %in% c("W6EducYP", "W1ch0_2HH", "W1ch3_11HH", "W1ch12_15HH", "W1ch16_17HH", "W1empsmum", "W1empsdad", "W1usevcHH")]
+cols_less_10 <- names(missing_percentage)[missing_percentage <= 10 & names(missing_percentage) %in% c("W1usevcHH", "W1wrk1aMP", "W1hea2MP", "W1hous12HH", "W1hiqualmum", "W1marstatmum", "W1nssecfam", "W1ethgrpYP", "W1heposs9YP", "W1hwndayYP", "W1disabYP", "W2disc1YP", "W4CannTryYP", "W5EducYP", "W5Apprent1YP", "W6JobYP", "W6UnivYP", "W8DDEGP", "W8DACTIVITY","W8DMARSTAT")]
+cols_less_10
+
+# Remove the missing rows for categorical predictors with less than 10% missing
+gp.data_filtered <- gp.data[complete.cases(gp.data[, cols_less_10]), ]
+gp.data <- gp.data_filtered
+nrow(gp.data) # check number of rows after filtering
+
+### --------------------------------------------------------------------------------------------
+
+# CONVERT CONTINUOUS TO BINARY
+
+# W1depkids
+gp.data$W1depkids <- as.factor(ifelse(gp.data$W1depkids > 1, 1, 0))
+
+# W6als
+gp.data$new_W6als <- ifelse(gp.data$W6als == 4, 0, 1)
+
+# MERGE VARIABLES (to solve aliased coefficients problem)
+
+# W6als and W6EducYP (they are highly correlated with each other)
+gp.data$combinedvar <- ifelse(gp.data$new_W6als == 1 | gp.data$W6EducYP == 1 , 1, 0)
+
+# Turn new merged variable into factor                                 
+gp.data$combinedvar <- factor(gp.data$new_W6als, levels = c("0", "1"))
+
+# REDUCE LEVELS
+# W1NoldBroHS - Convert values greater than 2 to 3, leave other values unchanged
+gp.data$W1NoldBroHS <- as.factor(ifelse(gp.data$W1NoldBroHS > 2, 3, gp.data$W1NoldBroHS))
+
+### --------------------------------------------------------------------------------------------
+# CONVERT ALL CATEGORICAL TO FACTOR
+
+# Choose continuous variables
+exclude_vars <- c("W1GrssyrMP", "W1GrssyrHH", "W1yschat1", "W2ghq12scr","W4schatYP","W8DGHQSC","W8DINCW","W1NoldBroHS")
+
+# Convert variables to factors (excluding continuous)
+for (var in setdiff(names(gp.data), exclude_vars)) {
+  if (length(unique(gp.data[[var]])) > 1) {  # Check if variable has more than two levels
+    gp.data[[var]] <- as.factor(gp.data[[var]])
+  }
+}
+
+# Check which variables are factor
+factor_vars <- sapply(gp.data, is.factor)
+factor_vars
+
+### --------------------------------------------------------------------------------------------
+
+# CHANGE NAs TO MISSING LEVEL
+
+exclude_vars <- exclude_vars[exclude_vars %in% names(gp.data)]
+# Identify categorical and binary columns
+non_continuous_columns <- setdiff(names(gp.data), exclude_vars)
+
+# Loop through non-continuous columns and add "missing" level to factor variables with NA
+for (var in non_continuous_columns) {  
+  if (is.factor(gp.data[[var]]) && any(is.na(gp.data[[var]]))) {
+      levels(gp.data[[var]]) <- c(levels(gp.data[[var]]), "missing")
+    }
+  }
+
+# Replace NA values with "missing" in non-continuous columns
+for (col in non_continuous_columns) {
+  gp.data[[col]][is.na(gp.data[[col]])] <- "missing"
+}
+
+
+# Loop through factor variables again and check their levels
+for (var in non_continuous_columns) {  
+  cat("Variable:", var, "\n")
+  cat("Levels:", levels(gp.data[[var]]), "\n\n")
+}
+
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# RUN INITIAL MODEL
+all.W8DINCW.lm <- lm(W8DINCW ~ . , data = gp.data)
+display(all.W8DINCW.lm)
+summary(all.W8DINCW.lm)
+#vif(all.W8DINCW.lm) - aliased coefficients error
+alias(all.W8DINCW.lm) # check aliased coefficients
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For these two variables, turn "missing" back to NA to deal with aliased coefficient problem (to get rid of "missing" level, they already have 0 missing due to removal)
+gp.data$W1wrkfullmum[gp.data$W1wrkfullmum == "missing" ] <- "NA"
+gp.data$W1disabYP[gp.data$W1disabYP == "missing" ] <- "NA"
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# RELEVELLING to most common level
+relevel_to_most_common <- function(data) {
+  factor_vars <- Filter(is.factor, data)
+  for (var in names(factor_vars)) {
+    freq <- table(factor_vars[[var]])
+    most_common_level <- names(sort(freq, decreasing = TRUE)[1])
+    data[[var]] <- relevel(factor_vars[[var]], ref = most_common_level)
+  }
+  return(data)
+}
+
+gp.data <- relevel_to_most_common(gp.data)
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# MERGE LEVELS TO MAKE MORE SIGNIFICANT
+
+# W1wrk1aMP
+summary(gp.data$W1wrk1aMP)
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 3] <- 2
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 11] <- 10
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 12] <- 10
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 9] <- 10
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 8] <- 10
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 7] <- 10
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 6] <- 10
+gp.data$W1wrk1aMP[gp.data$W1wrk1aMP == 5] <- 4
+
+# W1heposs9YP
+summary(gp.data$W1heposs9YP)
+gp.data$W1heposs9YP[gp.data$W1heposs9YP == 2] <- 1
+# W1hous12HH merging Rented from a Council or New Town and  Rented from a Housing Association 
+# Reduced from 0.22 to 0.07 (but further merging is increasing)
+summary(gp.data$W1hous12HH)
+gp.data$W1hous12HH[gp.data$W1hous12HH == 4] <- 5
+gp.data$W1hous12HH[gp.data$W1hous12HH == 7] <- 5
+gp.data$W1hous12HH[gp.data$W1hous12HH == 3] <- 8
+gp.data$W1hous12HH[gp.data$W1hous12HH == 1 ] <- 2
+# delete unused levels: 1, 3, 4, 6, 7
+
+# W1hiqualdad from 0.015 to 0.001
+summary(gp.data$W1hiqualdad)
+gp.data$W1hiqualdad[gp.data$W1hiqualdad == 3] <- 2
+gp.data$W1hiqualdad[gp.data$W1hiqualdad == 1] <- 2
+gp.data$W1hiqualdad[gp.data$W1hiqualdad == 4] <- 2
+gp.data$W1hiqualdad[gp.data$W1hiqualdad == 5] <- 2
+gp.data$W1hiqualdad[gp.data$W1hiqualdad == 10] <- 11
+gp.data$W1hiqualdad[gp.data$W1hiqualdad == 14] <- 16
+gp.data$W1hiqualdad[gp.data$W1hiqualdad == 18] <- 20
+
+# W1hiqualmum - already 2.2e^-16, so no noticeable change
+summary(gp.data$W1hiqualmum)
+gp.data$W1hiqualmum[gp.data$W1hiqualmum == 3 ] <- 2
+gp.data$W1hiqualmum[gp.data$W1hiqualmum == 6 ] <- 5
+gp.data$W1hiqualmum[gp.data$W1hiqualmum == 7 ] <- 5
+gp.data$W1hiqualmum[gp.data$W1hiqualmum == 10 ] <- 9
+gp.data$W1hiqualmum[gp.data$W1hiqualmum == 17 ] <- 16
+gp.data$W1hiqualmum[gp.data$W1hiqualmum == 18 ] <- 16
+
+
+# merging level 2 and 3 from W2depressYP
+# increased significance but still not significant
+summary(gp.data$W2depressYP)
+gp.data$W2depressYP[gp.data$W2depressYP == "2" ] <- "3"
+
+# merging levels from W4empsYP (still not significant)
+summary(gp.data$W4empsYP)
+gp.data$W4empsYP[gp.data$W4empsYP == "2" ] <- "1"
+gp.data$W4empsYP[gp.data$W4empsYP == "5" ] <- "1"
+
+# merging levels in W6acqno (still not significant)
+summary(gp.data$W6acqno)
+gp.data$W6acqno[gp.data$W6acqno== 1 ] <- 2
+gp.data$W6acqno[gp.data$W6acqno== 3 ] <- 4
+gp.data$W6acqno[gp.data$W6acqno== 7 ] <- 8
+gp.data$W6acqno[gp.data$W6acqno== 5 ] <- 6
+
+# merging levels from W8DACTIVITY (MERGING MADE IT SIGNIFICANT)
+summary(gp.data$W8DACTIVITY)
+gp.data$W8DACTIVITY[gp.data$W8DACTIVITY== 8 ] <- 7
+gp.data$W8DACTIVITY[gp.data$W8DACTIVITY== 9 ] <- 10
+gp.data$W8DACTIVITY[gp.data$W8DACTIVITY== 4 ] <- 6
+
+# merging levels from W8QMAFI (MERGING MADE IT SIGNIFICANT)
+summary(gp.data$W8QMAFI)
+gp.data$W8QMAFI[gp.data$W8QMAFI== 4 ] <- 5
+gp.data$W8QMAFI[gp.data$W8QMAFI== 2 ] <- 1
+summary(gp.data$W8QMAFI)
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# convert continuous W1GrssyrMP to categorical
+breaks <- c(-Inf, 5000, 10000,15000,20000, Inf)
+labels <- c("1", "2", "3", "4", "5")
+gp.data$W1GrssyrMP_category <- cut(gp.data$W1GrssyrMP, breaks = breaks, labels = labels, include.lowest = TRUE)
+gp.data$W1GrssyrMP_category <- factor(gp.data$W1GrssyrMP_category, levels = c("1", "2", "3", "4","5", "missing"))
+gp.data$W1GrssyrMP_category[is.na(gp.data$W1GrssyrMP)] <- "missing"
+levels(gp.data$W1GrssyrMP_category)
+summary(gp.data$W1GrssyrMP_category)
+
+# plot p_W1GrssyrMP_category
+p_W1GrssyrMP_category <- ggplot(gp.data, aes(x=factor(W1GrssyrMP_category), y=W8DINCW)) + geom_boxplot()
+p_W1GrssyrMP_category
+# merging level 1 and 2 from W1GrssyrMP_category (MERGING MADE IT MORE SIGNIFICANT)
+gp.data$W1GrssyrMP_category[gp.data$W1GrssyrMP_category== 2 ] <- 4
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# CHECKING INTERACTIONS BETWEEN THE MOST 3 SIGNIFICANT PREDICTORS
+
+# regression W1hiqualmum and W1nssecfam - SIGNIFICANT
+lm_combined.1 <- lm(W8DINCW ~ W1hiqualmum * W1nssecfam, data = gp.data)
+Anova(lm_combined.1)
+# regression W1hiqualmum and W1ethgrpYP - NOT SIGNIFICANT
+lm_combined.2 <- lm(W8DINCW ~ W1hiqualmum * W1ethgrpYP, data = gp.data)
+Anova(lm_combined.2)
+# regression W1nssecfam and W1ethgrpYP - SIGNIFICANT
+lm_combined.3 <- lm(W8DINCW ~ W1nssecfam  * W1ethgrpYP, data = gp.data)
+Anova(lm_combined.3)
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# BACKWARD ELIMINATION of non-significant variables
+all.W8DINCW.lm <- lm(W8DINCW ~ . - W1depkids - W1usevcHH - W1hea2MP - W1hous12HH - W8QMAFI - W1GrssyrMP_category - W1GrssyrMP- W1GrssyrHH -W1alceverYP-W1hiqualdad-W1famtyp2 -W8TENURE-W6OwnchiDV -W4schatYP- combinedvar - W1depkids-W1bulrc-W4NamesYP-W1truantYP -IndSchool-W4empsYP-W6gcse-W2depressYP-W1yschat1-W4RacismYP-W1condur5MP- W6acqno- W1wrkfullmum- W1InCarHH- W6DebtattYP- W1NoldBroHS- W6acqno - W4AlcFreqYP - W1wrkfulldad - new_W6als - W6als - W6EducYP - W1ch0_2HH - W1ch3_11HH - W1ch12_15HH - W1ch16_17HH - W1empsmum - W1empsdad - W6Apprent1YP - W6EducYP , data = gp.data)
+display(all.W8DINCW.lm)
+summary(all.W8DINCW.lm) # (1655 observations deleted due to missingness)
+Anova(all.W8DINCW.lm)
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Remove W1GrssyrMP and W1GrssyrHH from gp.data (more than 40% missing continuous)
+gp.data <- gp.data[, !(names(gp.data) %in% c("W1GrssyrMP", "W1GrssyrHH"))]
+# new LM attained through backward elimination
+all.W8DINCW.lm <- lm(W8DINCW ~ . - W6UnivYP- W8DMARSTAT -W1GrssyrMP_category- W8QMAFI -W1alceverYP-W1hiqualdad-W1famtyp2 -W6OwnchiDV -W4schatYP- combinedvar - W1depkids-W1bulrc-W4NamesYP-W1truantYP -IndSchool-W4empsYP-W6gcse-W2depressYP-W1yschat1-W4RacismYP-W1condur5MP- W1wrkfullmum- W1InCarHH- W6DebtattYP- W1NoldBroHS - W4AlcFreqYP - W1wrkfulldad - new_W6als - W6als - W6EducYP - W1ch0_2HH - W1ch3_11HH - W1ch12_15HH - W1ch16_17HH - W1empsmum - W1empsdad  , data = gp.data)
+display(all.W8DINCW.lm)
+summary(all.W8DINCW.lm) 
+Anova(all.W8DINCW.lm)
+vif(all.W8DINCW.lm)
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# TRANSFORMATIONS
+
+# Run residual plots
+
+par(mfrow=c(2,2))
+plot(all.W8DINCW.lm, which=c(1,2))
+hist(all.W8DINCW.lm$residuals, main="Histogram of residuals", font.main=1, xlab="Residuals")
+
+
+# Run log transform (non-significant variables removed: W1hous12HH, W1GrssyrMP_category)
+log.W8DINCW.lm <- lm(log(W8DINCW) ~ . - W6UnivYP - W8DMARSTAT -W1GrssyrMP_category- W8QMAFI -W1alceverYP-W1hiqualdad-W1famtyp2 -W6OwnchiDV -W4schatYP- combinedvar - W1depkids-W1bulrc-W4NamesYP-W1truantYP -IndSchool-W4empsYP-W6gcse-W2depressYP-W1yschat1-W4RacismYP-W1condur5MP- W1wrkfullmum- W1InCarHH- W6DebtattYP- W1NoldBroHS - W4AlcFreqYP - W1wrkfulldad - new_W6als - W6als - W6EducYP - W1ch0_2HH - W1ch3_11HH - W1ch12_15HH - W1ch16_17HH - W1empsmum - W1empsdad  , data = gp.data)
+display(log.W8DINCW.lm)
+Anova(log.W8DINCW.lm) # THIS IS THE FINAL MODEL
+vif(log.W8DINCW.lm)
+summary(log.W8DINCW.lm)
+
+# Run residual plots again after log transform
+par(mfrow=c(2,2))
+plot(log.W8DINCW.lm, which=c(1,2))
+hist(log.W8DINCW.lm$residuals, main="Histogram of residuals", font.main=1, xlab="Residuals")
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# OUTLIERS
+# check standardized residuals
+standardized_residuals <- rstandard(all.W8DINCW.lm)
+head(standardized_residuals)
+
+#  influence measures
+influence <- influence.measures(all.W8DINCW.lm)
+
+# Cook's distance
+cooks_distance <- influence$cooks.distance
+head(cooks_distance)
+
+# DFFITS
+dffits <- influence$dffits
+head(dffits)
+
+# Leverage values
+leverage <- influence$hat
+head(leverage)
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Change "missing" level back to NA to compare models NOT USED IN THE FINAL MODEL (DON'T RUN FOR FINAL)
+
+# Loop through variables and check their levels (identify which ones have "missing" level)
+for (var in variables_to_modify) {
+  if (is.factor(gp.data[[var]])) {
+    cat("Variable:", var, "\n")
+    cat("Levels:", levels(gp.data[[var]]), "\n\n")
+  } else {
+    cat("Variable:", var, "is not a factor variable.\n\n")
+  }
+}
+
+# change "missing" back to NA
+gp.data$W1wrkfullmum[gp.data$W1GrssyrMP_category == "missing" ] <- "NA"
+gp.data$W8DDEGP[gp.data$W8DDEGP == "missing" ] <- "NA"
+gp.data$W8QMAFI[gp.data$W8QMAFI == "missing" ] <- "NA"
+gp.data$W1GrssyrMP_category[gp.data$W1GrssyrMP_category == "missing" ] <- "NA"
+
+
+# run regression again
+NA.removed.lm <- lm(W8DINCW ~ . - W8DMARSTAT -W1GrssyrMP_category- W8QMAFI -W1alceverYP-W1hiqualdad-W1famtyp2 -W6OwnchiDV -W4schatYP- combinedvar - W1depkids-W1bulrc-W4NamesYP-W1truantYP -IndSchool-W4empsYP-W6gcse-W2depressYP-W1yschat1-W4RacismYP-W1condur5MP- W6acqno- W1wrkfullmum- W1InCarHH- W6DebtattYP- W1NoldBroHS - W4AlcFreqYP - W1wrkfulldad - new_W6als - W6als  - W1ch0_2HH - W1ch3_11HH - W1ch12_15HH - W1ch16_17HH - W1empsmum - W1empsdad - W6EducYP , data = gp.data)
+display(NA.removed.lm) # R^2 decreased to 0.65
+Anova(NA.removed.lm) # some values not significant anymore
+summary(NA.removed.lm) # 2188 observations deleted due to missingness (3267-2188 = 1079 rows included in analysis)
+
+# remove the ones which became non-significant (no visible change)
+NA.removed.lm <- lm(W8DINCW ~ . -W1hous12HH -W8DGHQSC-W1hwndayYP - W1hea2MP- W8DACTIVITY -W1GrssyrMP_category- W8QMAFI - W8DMARSTAT -W1alceverYP-W1hiqualdad-W5JobYP-W1famtyp2 -W8TENURE-W6OwnchiDV -W4schatYP- combinedvar - W1depkids-W1bulrc-W4NamesYP-W1truantYP -IndSchool-W4empsYP-W6gcse-W2depressYP-W1yschat1-W4RacismYP-W1condur5MP- W6acqno- W1wrkfullmum- W1InCarHH- W6DebtattYP- W1NoldBroHS- W6acqno - W4AlcFreqYP - W1wrkfulldad - new_W6als - W6als - W6EducYP  - W1ch0_2HH - W1ch3_11HH - W1ch12_15HH - W1ch16_17HH - W1empsmum - W1empsdad - W1usevcHH , data = gp.data)
+display(NA.removed.lm)
+Anova(NA.removed.lm)
+
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# CROSS VALIDATION
+set.seed(1)
+cross.val <- sample(1:nrow(gp.data), 0.1 * nrow(gp.data), replace = FALSE)
+training.set <- gp.data[-cross.val, ]  # 90% for training
+test.set <- gp.data[cross.val, ]       # 10% for testing
+training.set <- droplevels(training.set)
+pred.val.set <- data.frame(predicted = predict(log.W8DINCW.lm, test.set), original = test.set$W8DINCW, error = (predict(log.W8DINCW.lm, test.set) - test.set$W8DINCW))
+
+# Plot 1: Predicted vs Original`
+p1 <- ggplot(data = pred.val.set, aes(x = predicted, y = original)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed")
+
+# Plot 2: Predicted vs Error
+p2 <- ggplot(data = pred.val.set, aes(x = predicted, y = error)) +
+  geom_point() +
+  geom_abline(slope = c(0, 0, 0), intercept = c(0, sd(pred.val.set$error), (-1 * sd(pred.val.set$error))))
+
+grid.arrange(p1, p2, nrow = 2)
+
+
+
+
